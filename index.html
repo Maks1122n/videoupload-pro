@@ -5,152 +5,685 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VideoUpload Pro</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background: #f5f5f5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
         }
+
         .container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
         }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        button {
-            background: #007bff;
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
             color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 5px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .header p {
+            opacity: 0.9;
             font-size: 16px;
-            cursor: pointer;
+        }
+
+        .upload-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .form-input {
             width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fafbfc;
         }
-        button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
-        .progress {
-            margin: 20px 0;
-            padding: 10px;
-            background: #e9ecef;
-            border-radius: 5px;
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        .file-upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            background: linear-gradient(45deg, #f8f9ff, #f0f3ff);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .file-upload-area:hover {
+            border-color: #5a67d8;
+            background: linear-gradient(45deg, #f0f3ff, #e8edff);
+        }
+
+        .file-upload-area.dragover {
+            border-color: #4c51bf;
+            background: linear-gradient(45deg, #e8edff, #dde4ff);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: #667eea;
+        }
+
+        .upload-text {
+            font-size: 18px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .upload-subtext {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 16px;
+        }
+
+        .file-input {
             display: none;
         }
-        .alert {
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid;
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border-color: #c3e6cb;
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
         }
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border-color: #f5c6cb;
+
+        .btn:active {
+            transform: translateY(0);
         }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .file-list {
-            margin: 20px 0;
+            margin-top: 20px;
         }
+
         .file-item {
-            padding: 10px;
-            background: #f8f9fa;
-            margin: 5px 0;
-            border-radius: 5px;
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: #718096;
+        }
+
+        .file-remove {
+            background: #fed7d7;
+            color: #c53030;
+            border: none;
+            border-radius: 8px;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .file-remove:hover {
+            background: #feb2b2;
+        }
+
+        /* КРАСИВЫЙ ПРОГРЕСС С ЭТАПАМИ */
+        .progress-container {
+            display: none;
+            margin: 20px 0;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .progress-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-steps {
+            margin-bottom: 25px;
+        }
+
+        .progress-step {
+            display: flex;
+            align-items: center;
+            margin: 12px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-step.active {
+            background: rgba(102, 126, 234, 0.4);
+            border: 1px solid rgba(102, 126, 234, 0.6);
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .progress-step.completed {
+            background: rgba(34, 197, 94, 0.4);
+            border: 1px solid rgba(34, 197, 94, 0.6);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+        }
+
+        .progress-step.active .step-icon {
+            background: rgba(102, 126, 234, 0.8);
+        }
+
+        .progress-step.completed .step-icon {
+            background: rgba(34, 197, 94, 0.8);
+        }
+
+        .step-text {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .step-time {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-left: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4fd1c7, #06b6d4, #667eea);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(79, 209, 199, 0.5);
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 16px;
+            color: #ffffff;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* ПУЛЬСИРУЮЩАЯ АНИМАЦИЯ ДЛЯ АКТИВНОГО ШАГА */
+        @keyframes pulse {
+            0% { box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); }
+            50% { box-shadow: 0 4px 20px rgba(102, 126, 234, 0.6); }
+            100% { box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); }
+        }
+
+        .progress-step.active {
+            animation: pulse 2s infinite;
+        }
+
+        .alert {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+
+        .alert-error {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #feb2b2;
+        }
+
+        .alert-info {
+            background: #bee3f8;
+            color: #2a4365;
+            border: 1px solid #90cdf4;
+        }
+
+        .results-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .result-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .result-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+
+        .result-stats {
+            font-size: 12px;
+            color: #718096;
+        }
+
+        .result-links {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .result-link {
+            flex: 1;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .result-link:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+        }
+
+        .floating-actions {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .fab {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 16px;
+            }
+            
+            .upload-card {
+                padding: 24px 20px;
+                border-radius: 16px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .file-upload-area {
+                padding: 32px 16px;
+            }
+            
+            .upload-icon {
+                font-size: 40px;
+            }
+        }
+
+        .emoji {
+            font-style: normal;
+        }
+
+        .history-section {
+            display: none;
+        }
+
+        .history-item {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .history-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 8px;
         }
-        .remove-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
+
+        .history-artikul {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .history-date {
             font-size: 12px;
+            color: #718096;
+        }
+
+        .history-description {
+            font-size: 14px;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+
+        .history-link {
+            font-size: 12px;
+            color: #667eea;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📦 VideoUpload Pro</h1>
-        <p>Загрузка видео в Dropbox</p>
+        <div class="header">
+            <h1><span class="emoji">📦</span> VideoUpload Pro</h1>
+            <p>Загрузка видео в Dropbox с отслеживанием прогресса</p>
+        </div>
 
+        <!-- Alert container -->
         <div id="alertContainer"></div>
 
-        <form id="uploadForm">
-            <div class="form-group">
-                <label for="artikul">🏷️ Артикул:</label>
-                <input type="text" id="artikul" name="artikul" required>
+        <!-- Upload Form Section -->
+        <div id="uploadSection">
+            <div class="upload-card">
+                <form id="uploadForm">
+                    <div class="form-group">
+                        <label for="artikul"><span class="emoji">🏷️</span> Артикул</label>
+                        <input type="text" id="artikul" name="artikul" class="form-input" placeholder="Введите артикул" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date"><span class="emoji">📅</span> Дата</label>
+                        <input type="date" id="date" name="date" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description"><span class="emoji">📝</span> Описание</label>
+                        <textarea id="description" name="description" class="form-input form-textarea" placeholder="Описание проекта" required></textarea>
+                    </div>
+
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <div class="upload-icon"><span class="emoji">📱</span></div>
+                        <div class="upload-text">Выберите видео файлы</div>
+                        <div class="upload-subtext">Перетащите файлы сюда или нажмите для выбора</div>
+                        <div class="upload-subtext">Поддерживаются: MP4, AVI, MOV, WebM</div>
+                        <input type="file" id="fileInput" class="file-input" multiple accept="video/*">
+                    </div>
+
+                    <div class="file-list" id="fileList"></div>
+
+                    <!-- КРАСИВЫЙ ПРОГРЕСС С ЭТАПАМИ -->
+                    <div class="progress-container" id="progressContainer">
+                        <div class="progress-title">🚀 Процесс загрузки файлов</div>
+                        
+                        <div class="progress-steps" id="progressSteps">
+                            <div class="progress-step" id="step1">
+                                <div class="step-icon">📋</div>
+                                <div class="step-text">Проверка и подготовка данных</div>
+                                <div class="step-time" id="step1-time"></div>
+                            </div>
+                            <div class="progress-step" id="step2">
+                                <div class="step-icon">📁</div>
+                                <div class="step-text">Создание папки в Dropbox</div>
+                                <div class="step-time" id="step2-time"></div>
+                            </div>
+                            <div class="progress-step" id="step3">
+                                <div class="step-icon">📤</div>
+                                <div class="step-text">Загрузка файлов в облако</div>
+                                <div class="step-time" id="step3-time"></div>
+                            </div>
+                            <div class="progress-step" id="step4">
+                                <div class="step-icon">📊</div>
+                                <div class="step-text">Запись в Google Таблицу</div>
+                                <div class="step-time" id="step4-time"></div>
+                            </div>
+                            <div class="progress-step" id="step5">
+                                <div class="step-icon">✅</div>
+                                <div class="step-text">Завершение загрузки</div>
+                                <div class="step-time" id="step5-time"></div>
+                            </div>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-text" id="progressText">Готов к загрузке</div>
+                    </div>
+
+                    <button type="submit" class="btn" id="uploadBtn">
+                        <span class="emoji">🚀</span> Загрузить видео
+                    </button>
+                </form>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label for="date">📅 Дата:</label>
-                <input type="date" id="date" name="date" required>
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection">
+            <div class="upload-card">
+                <h3 style="margin-bottom: 16px; color: #2d3748;"><span class="emoji">✅</span> Результаты загрузки</h3>
+                <div id="resultsList"></div>
+                <button class="btn" onclick="resetForm()" style="margin-top: 16px;">
+                    <span class="emoji">🔄</span> Загрузить еще
+                </button>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label for="description">📝 Описание:</label>
-                <textarea id="description" name="description" required></textarea>
+        <!-- History Section -->
+        <div class="history-section" id="historySection">
+            <div class="upload-card">
+                <h3 style="margin-bottom: 16px; color: #2d3748;"><span class="emoji">📚</span> История загрузок</h3>
+                <div id="historyList"></div>
+                <button class="btn" onclick="showUploadForm()" style="margin-top: 16px;">
+                    <span class="emoji">⬅️</span> Назад к загрузке
+                </button>
             </div>
-
-            <div class="form-group">
-                <label for="files">📱 Видео файлы:</label>
-                <input type="file" id="files" multiple accept="video/*" required>
-            </div>
-
-            <div id="fileList" class="file-list"></div>
-
-            <div id="progress" class="progress">
-                <div>Статус: <span id="progressText">Готов к загрузке</span></div>
-            </div>
-
-            <button type="submit" id="submitBtn">🚀 Загрузить видео</button>
-        </form>
-
-        <div id="results" style="display: none; margin-top: 30px;">
-            <h3>✅ Результаты загрузки</h3>
-            <div id="resultContent"></div>
         </div>
     </div>
 
+    <div class="floating-actions">
+        <button class="fab" id="historyBtn" title="История">
+            <span class="emoji">📚</span>
+        </button>
+        <button class="fab" id="refreshBtn" title="Обновить">
+            <span class="emoji">🔄</span>
+        </button>
+    </div>
+
     <script>
-        // МАКСИМАЛЬНО ПРОСТОЙ И НАДЕЖНЫЙ КОД
+        // МАКСИМАЛЬНО ПРОСТОЙ И НАДЕЖНЫЙ КОД С КРАСИВЫМ ПРОГРЕССОМ
         console.log('🚨 JavaScript загружен!');
 
         let selectedFiles = [];
+        let startTime = null;
+        let uploadHistory = loadHistory();
 
         // Установка текущей даты
         document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
+        // Обработчики drag&drop
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        fileUploadArea.addEventListener('click', () => fileInput.click());
+        fileUploadArea.addEventListener('dragover', handleDragOver);
+        fileUploadArea.addEventListener('dragleave', handleDragLeave);
+        fileUploadArea.addEventListener('drop', handleDrop);
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files).filter(file => 
+                file.type.startsWith('video/')
+            );
+            addFiles(files);
+        }
+
         // Обработчик выбора файлов
-        document.getElementById('files').addEventListener('change', function(e) {
+        fileInput.addEventListener('change', function(e) {
             console.log('📁 Файлы выбраны:', e.target.files.length);
             selectedFiles = Array.from(e.target.files);
             updateFileList();
         });
+
+        // Добавление файлов через drag&drop
+        function addFiles(files) {
+            files.forEach(file => {
+                if (!selectedFiles.find(f => f.name === file.name && f.size === file.size)) {
+                    selectedFiles.push(file);
+                }
+            });
+            updateFileList();
+        }
 
         // Показать список файлов
         function updateFileList() {
@@ -162,8 +695,11 @@
 
             fileList.innerHTML = selectedFiles.map((file, index) => `
                 <div class="file-item">
-                    <span>📹 ${file.name} (${formatFileSize(file.size)})</span>
-                    <button type="button" class="remove-btn" onclick="removeFile(${index})">Удалить</button>
+                    <div class="file-info">
+                        <div class="file-name">📹 ${file.name}</div>
+                        <div class="file-size">${formatFileSize(file.size)}</div>
+                    </div>
+                    <button type="button" class="file-remove" onclick="removeFile(${index})">×</button>
                 </div>
             `).join('');
         }
@@ -183,6 +719,43 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
+        // ФУНКЦИИ КРАСИВОГО ПРОГРЕССА
+        function setStep(stepNumber, status = 'active') {
+            const step = document.getElementById(`step${stepNumber}`);
+            if (step) {
+                step.className = 'progress-step';
+                if (status) {
+                    step.classList.add(status);
+                }
+                
+                // Завершаем предыдущие шаги
+                for (let i = 1; i < stepNumber; i++) {
+                    const prevStep = document.getElementById(`step${i}`);
+                    if (prevStep) {
+                        prevStep.className = 'progress-step completed';
+                    }
+                }
+                
+                // Добавляем время
+                if (startTime && status === 'active') {
+                    const elapsed = Math.round((Date.now() - startTime) / 1000);
+                    const timeDiv = document.getElementById(`step${stepNumber}-time`);
+                    if (timeDiv) {
+                        timeDiv.textContent = `${elapsed}s`;
+                    }
+                }
+            }
+        }
+
+        function updateProgress(percent, text) {
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = text;
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
         // Показать уведомление
         function showAlert(message, type = 'success') {
             const alertContainer = document.getElementById('alertContainer');
@@ -196,14 +769,13 @@
             }, 5000);
         }
 
-        // ГЛАВНАЯ ФУНКЦИЯ ЗАГРУЗКИ
+        // ГЛАВНАЯ ФУНКЦИЯ ЗАГРУЗКИ С КРАСИВЫМ ПРОГРЕССОМ
         document.getElementById('uploadForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             console.log('🚨🚨🚨 ФОРМА ОТПРАВЛЕНА!');
 
-            const submitBtn = document.getElementById('submitBtn');
-            const progress = document.getElementById('progress');
-            const progressText = document.getElementById('progressText');
+            const submitBtn = document.getElementById('uploadBtn');
+            const progressContainer = document.getElementById('progressContainer');
 
             // Проверки
             if (selectedFiles.length === 0) {
@@ -212,11 +784,16 @@
             }
 
             try {
-                // Показать прогресс
-                progress.style.display = 'block';
+                // НАЧИНАЕМ КРАСИВЫЙ ПРОГРЕСС
+                startTime = Date.now();
+                progressContainer.style.display = 'block';
                 submitBtn.disabled = true;
                 submitBtn.textContent = '⏳ Загружаю...';
-                progressText.textContent = 'Подготовка к отправке...';
+
+                // ЭТАП 1: Подготовка (0-20%)
+                setStep(1, 'active');
+                updateProgress(10, 'Подготавливаем данные для отправки...');
+                await sleep(800);
 
                 // Собираем данные
                 const formData = new FormData();
@@ -229,12 +806,15 @@
                     formData.append('videos', file);
                 });
 
-                console.log('📦 FormData готов, отправляю...');
-                progressText.textContent = 'Отправляю файлы на сервер...';
+                // ЭТАП 2: Отправка запроса (20-40%)
+                setStep(2, 'active');
+                updateProgress(25, 'Отправляем файлы на сервер...');
+                await sleep(500);
 
-                // ОТПРАВКА ЗАПРОСА
+                console.log('📦 FormData готов, отправляю...');
                 console.log('🚀 Отправляю запрос на:', window.location.origin + '/upload');
-                
+
+                // РЕАЛЬНЫЙ ЗАПРОС (НЕ ТРОГАЕМ РАБОЧИЙ КОД!)
                 const response = await fetch('/upload', {
                     method: 'POST',
                     body: formData
@@ -243,12 +823,51 @@
                 console.log('📨 Ответ получен:', response.status);
 
                 if (response.ok) {
+                    // ЭТАП 3: Обработка (40-80%)
+                    setStep(3, 'active');
+                    updateProgress(60, 'Загружаем файлы в Dropbox...');
+                    await sleep(1000);
+
+                    // ЭТАП 4: Финализация (80-95%)
+                    setStep(4, 'active');
+                    updateProgress(85, 'Добавляем запись в Google Таблицу...');
+                    await sleep(800);
+
+                    // ЭТАП 5: Завершение (95-100%)
+                    setStep(5, 'completed');
+                    updateProgress(100, '✅ Загрузка успешно завершена!');
+
                     const result = await response.json();
                     console.log('✅ Результат:', result);
-                    
-                    progressText.textContent = '✅ Загрузка завершена!';
-                    showResult(result);
-                    showAlert('Файлы успешно загружены!', 'success');
+
+                    // Показать время каждого этапа
+                    const totalTime = Math.round((Date.now() - startTime) / 1000);
+                    for (let i = 1; i <= 5; i++) {
+                        const timeDiv = document.getElementById(`step${i}-time`);
+                        if (timeDiv && i < 5) {
+                            timeDiv.textContent = '✓';
+                        } else if (timeDiv && i === 5) {
+                            timeDiv.textContent = `${totalTime}s`;
+                        }
+                    }
+
+                    // Сохранить в историю
+                    const historyItem = {
+                        artikul: result.artikul,
+                        date: result.date,
+                        description: result.description,
+                        folder_link: result.folder_link,
+                        files: result.uploaded_files,
+                        uploaded_at: new Date().toISOString()
+                    };
+                    uploadHistory.unshift(historyItem);
+                    saveHistory();
+
+                    setTimeout(() => {
+                        showResult(result);
+                        showAlert('Файлы успешно загружены!', 'success');
+                    }, 1500);
+
                 } else {
                     const error = await response.text();
                     console.error('❌ Ошибка сервера:', error);
@@ -257,7 +876,7 @@
 
             } catch (error) {
                 console.error('💥 Ошибка:', error);
-                progressText.textContent = '❌ Ошибка загрузки';
+                updateProgress(0, '❌ Ошибка загрузки');
                 showAlert('Ошибка: ' + error.message, 'error');
             } finally {
                 submitBtn.disabled = false;
@@ -267,24 +886,124 @@
 
         // Показать результаты
         function showResult(result) {
-            const resultsDiv = document.getElementById('results');
-            const resultContent = document.getElementById('resultContent');
-            
-            resultContent.innerHTML = `
-                <p><strong>Артикул:</strong> ${result.artikul}</p>
-                <p><strong>Дата:</strong> ${result.date}</p>
-                <p><strong>Описание:</strong> ${result.description}</p>
-                <p><strong>Загружено файлов:</strong> ${result.uploaded_files.length}</p>
-                <p><strong>Время загрузки:</strong> ${result.total_duration}</p>
-                <div style="margin: 20px 0;">
-                    <a href="${result.folder_link}" target="_blank" style="display: inline-block; background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-right: 10px;">📦 Открыть папку Dropbox</a>
-                    ${result.sheet_link ? `<a href="${result.sheet_link}" target="_blank" style="display: inline-block; background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">📊 Открыть таблицу</a>` : ''}
+            const resultsDiv = document.getElementById('resultsSection');
+            const resultsList = document.getElementById('resultsList');
+            const uploadSection = document.getElementById('uploadSection');
+
+            uploadSection.style.display = 'none';
+            resultsDiv.style.display = 'block';
+
+            resultsList.innerHTML = `
+                <div class="result-item">
+                    <div class="result-header">
+                        <div>
+                            <div class="result-title">📦 ${result.artikul}</div>
+                            <div class="result-stats">Дата: ${result.date} • Файлов: ${result.uploaded_files.length} • Время: ${result.total_duration}</div>
+                        </div>
+                    </div>
+                    <div style="margin: 12px 0; color: #4a5568; font-size: 14px;">
+                        ${result.description}
+                    </div>
+                    <div><strong>Загруженные файлы:</strong></div>
+                    ${result.uploaded_files.map(file => `
+                        <div style="margin: 8px 0; padding: 8px; background: #f7fafc; border-radius: 8px; font-size: 14px;">
+                            📹 ${file.filename} (${file.size}) - ${file.upload_time}
+                        </div>
+                    `).join('')}
+                    <div class="result-links">
+                        <a href="${result.folder_link}" target="_blank" class="result-link">
+                            <span class="emoji">📦</span> Открыть папку
+                        </a>
+                        ${result.sheet_link ? `<a href="${result.sheet_link}" target="_blank" class="result-link">
+                            <span class="emoji">📊</span> Открыть таблицу
+                        </a>` : ''}
+                    </div>
                 </div>
             `;
-            
-            resultsDiv.style.display = 'block';
-            document.getElementById('uploadForm').scrollIntoView();
         }
+
+        // Сброс формы
+        function resetForm() {
+            document.getElementById('uploadForm').reset();
+            selectedFiles = [];
+            updateFileList();
+            document.getElementById('date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('uploadSection').style.display = 'block';
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('historySection').style.display = 'none';
+        }
+
+        function showUploadForm() {
+            document.getElementById('uploadSection').style.display = 'block';
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('historySection').style.display = 'none';
+        }
+
+        // История загрузок
+        function loadHistory() {
+            try {
+                const history = localStorage.getItem('videoUploadHistory');
+                return history ? JSON.parse(history) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveHistory() {
+            try {
+                const historyToSave = uploadHistory.slice(0, 50);
+                localStorage.setItem('videoUploadHistory', JSON.stringify(historyToSave));
+            } catch (e) {
+                console.error('Failed to save history:', e);
+            }
+        }
+
+        function showHistory() {
+            const historySection = document.getElementById('historySection');
+            const historyList = document.getElementById('historyList');
+            const uploadSection = document.getElementById('uploadSection');
+            const resultsSection = document.getElementById('resultsSection');
+
+            uploadSection.style.display = 'none';
+            resultsSection.style.display = 'none';
+            historySection.style.display = 'block';
+
+            if (uploadHistory.length === 0) {
+                historyList.innerHTML = `
+                    <div style="text-align: center; color: #718096; padding: 40px 20px;">
+                        <div style="font-size: 48px; margin-bottom: 16px;">📭</div>
+                        <div>История загрузок пуста</div>
+                    </div>
+                `;
+                return;
+            }
+
+            historyList.innerHTML = uploadHistory.map(item => `
+                <div class="history-item">
+                    <div class="history-header">
+                        <div class="history-artikul">📦 ${item.artikul}</div>
+                        <div class="history-date">${new Date(item.uploaded_at).toLocaleDateString('ru-RU')}</div>
+                    </div>
+                    <div class="history-description">${item.description}</div>
+                    <div style="font-size: 12px; color: #718096; margin-bottom: 8px;">
+                        Файлов: ${item.files.length} • Дата: ${item.date}
+                    </div>
+                    <a href="${item.folder_link}" target="_blank" class="history-link">
+                        Открыть папку в Dropbox →
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        function refreshPage() {
+            window.location.reload();
+        }
+
+        // Floating action buttons
+        document.getElementById('historyBtn').addEventListener('click', showHistory);
+        document.getElementById('refreshBtn').addEventListener('click', refreshPage);
 
         console.log('✅ Все скрипты загружены и готовы!');
     </script>
