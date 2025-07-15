@@ -5,931 +5,288 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VideoUpload Pro</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
         }
-
         .container {
-            max-width: 480px;
-            margin: 0 auto;
-            padding: 20px;
-            min-height: 100vh;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            color: white;
-        }
-
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-
-        .header p {
-            opacity: 0.9;
-            font-size: 16px;
-        }
-
-        .upload-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 30px 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
         .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-            font-size: 14px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #e1e5e9;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: #fafbfc;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #667eea;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .form-textarea {
-            resize: vertical;
-            min-height: 80px;
-            font-family: inherit;
-        }
-
-        .file-upload-area {
-            border: 3px dashed #667eea;
-            border-radius: 16px;
-            padding: 40px 20px;
-            text-align: center;
-            background: linear-gradient(45deg, #f8f9ff, #f0f3ff);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .file-upload-area:hover {
-            border-color: #5a67d8;
-            background: linear-gradient(45deg, #f0f3ff, #e8edff);
-        }
-
-        .file-upload-area.dragover {
-            border-color: #4c51bf;
-            background: linear-gradient(45deg, #e8edff, #dde4ff);
-            transform: scale(1.02);
-        }
-
-        .upload-icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-            color: #667eea;
-        }
-
-        .upload-text {
-            font-size: 18px;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #4a5568;
-        }
-
-        .upload-subtext {
-            font-size: 14px;
-            color: #718096;
-            margin-bottom: 16px;
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 16px 24px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .file-list {
-            margin-top: 20px;
-        }
-
-        .file-item {
-            background: #f7fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .file-info {
-            flex: 1;
-        }
-
-        .file-name {
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 4px;
-            font-size: 14px;
-        }
-
-        .file-size {
-            font-size: 12px;
-            color: #718096;
-        }
-
-        .file-remove {
-            background: #fed7d7;
-            color: #c53030;
-            border: none;
-            border-radius: 8px;
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-
-        .file-remove:hover {
-            background: #feb2b2;
-        }
-
-        .progress-container {
-            display: none;
-            margin-top: 20px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #e2e8f0;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 12px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .progress-text {
-            text-align: center;
-            font-size: 14px;
-            color: #4a5568;
-            font-weight: 500;
-        }
-
-        .alert {
-            padding: 16px;
-            border-radius: 12px;
             margin-bottom: 20px;
-            font-size: 14px;
-            font-weight: 500;
         }
-
-        .alert-success {
-            background: #c6f6d5;
-            color: #22543d;
-            border: 1px solid #9ae6b4;
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
         }
-
-        .alert-error {
-            background: #fed7d7;
-            color: #742a2a;
-            border: 1px solid #feb2b2;
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
         }
-
-        .alert-info {
-            background: #bee3f8;
-            color: #2a4365;
-            border: 1px solid #90cdf4;
-        }
-
-        .results-section {
-            display: none;
-            margin-top: 20px;
-        }
-
-        .result-item {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e2e8f0;
-        }
-
-        .result-header {
-            display: flex;
-            justify-content: between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-        }
-
-        .result-title {
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 4px;
-        }
-
-        .result-stats {
-            font-size: 12px;
-            color: #718096;
-        }
-
-        .result-links {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .result-link {
-            flex: 1;
-            background: #667eea;
+        button {
+            background: #007bff;
             color: white;
-            text-decoration: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        .result-link:hover {
-            background: #5a67d8;
-            transform: translateY(-1px);
-        }
-
-        .floating-actions {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .fab {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
+            padding: 15px 30px;
             border: none;
-            font-size: 24px;
+            border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 100%;
         }
-
-        .fab:hover {
-            transform: scale(1.1);
-            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
         }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 16px;
-            }
-            
-            .upload-card {
-                padding: 24px 20px;
-                border-radius: 16px;
-            }
-            
-            .header h1 {
-                font-size: 24px;
-            }
-            
-            .file-upload-area {
-                padding: 32px 16px;
-            }
-            
-            .upload-icon {
-                font-size: 40px;
-            }
-        }
-
-        .emoji {
-            font-style: normal;
-        }
-
-        .history-section {
+        .progress {
+            margin: 20px 0;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
             display: none;
         }
-
-        .history-item {
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            border: 1px solid #e2e8f0;
+        .alert {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid;
         }
-
-        .history-header {
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+        .file-list {
+            margin: 20px 0;
+        }
+        .file-item {
+            padding: 10px;
+            background: #f8f9fa;
+            margin: 5px 0;
+            border-radius: 5px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
         }
-
-        .history-artikul {
-            font-weight: 600;
-            color: #2d3748;
-        }
-
-        .history-date {
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
             font-size: 12px;
-            color: #718096;
-        }
-
-        .history-description {
-            font-size: 14px;
-            color: #4a5568;
-            margin-bottom: 8px;
-        }
-
-        .history-link {
-            font-size: 12px;
-            color: #667eea;
-            text-decoration: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1><span class="emoji">📦</span> VideoUpload Pro</h1>
-            <p>Загрузка видео в Dropbox</p>
-        </div>
+        <h1>📦 VideoUpload Pro</h1>
+        <p>Загрузка видео в Dropbox</p>
 
-        <!-- Alert container -->
         <div id="alertContainer"></div>
 
-        <!-- Upload Form Section -->
-        <div id="uploadSection">
-            <div class="upload-card">
-                <form id="uploadForm">
-                    <div class="form-group">
-                        <label for="artikul"><span class="emoji">🏷️</span> Артикул</label>
-                        <input type="text" id="artikul" name="artikul" class="form-input" placeholder="Введите артикул" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="date"><span class="emoji">📅</span> Дата</label>
-                        <input type="date" id="date" name="date" class="form-input" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="description"><span class="emoji">📝</span> Описание</label>
-                        <textarea id="description" name="description" class="form-input form-textarea" placeholder="Описание проекта" required></textarea>
-                    </div>
-
-                    <div class="file-upload-area" id="fileUploadArea">
-                        <div class="upload-icon"><span class="emoji">📱</span></div>
-                        <div class="upload-text">Выберите видео файлы</div>
-                        <div class="upload-subtext">Перетащите файлы сюда или нажмите для выбора</div>
-                        <div class="upload-subtext">Поддерживаются: MP4, AVI, MOV, WebM</div>
-                        <input type="file" id="fileInput" class="file-input" multiple accept="video/*">
-                    </div>
-
-                    <div class="file-list" id="fileList"></div>
-
-                    <div class="progress-container" id="progressContainer">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progressFill"></div>
-                        </div>
-                        <div class="progress-text" id="progressText">Подготовка...</div>
-                    </div>
-
-                    <button type="submit" class="btn" id="uploadBtn">
-                        <span class="emoji">🚀</span> Загрузить видео
-                    </button>
-                </form>
+        <form id="uploadForm">
+            <div class="form-group">
+                <label for="artikul">🏷️ Артикул:</label>
+                <input type="text" id="artikul" name="artikul" required>
             </div>
-        </div>
 
-        <!-- Results Section -->
-        <div class="results-section" id="resultsSection">
-            <div class="upload-card">
-                <h3 style="margin-bottom: 16px; color: #2d3748;"><span class="emoji">✅</span> Результаты загрузки</h3>
-                <div id="resultsList"></div>
-                <button class="btn" onclick="app.resetForm()" style="margin-top: 16px;">
-                    <span class="emoji">🔄</span> Загрузить еще
-                </button>
+            <div class="form-group">
+                <label for="date">📅 Дата:</label>
+                <input type="date" id="date" name="date" required>
             </div>
-        </div>
 
-        <!-- History Section -->
-        <div class="history-section" id="historySection">
-            <div class="upload-card">
-                <h3 style="margin-bottom: 16px; color: #2d3748;"><span class="emoji">📚</span> История загрузок</h3>
-                <div id="historyList"></div>
-                <button class="btn" onclick="app.showUploadForm()" style="margin-top: 16px;">
-                    <span class="emoji">⬅️</span> Назад к загрузке
-                </button>
+            <div class="form-group">
+                <label for="description">📝 Описание:</label>
+                <textarea id="description" name="description" required></textarea>
             </div>
-        </div>
-    </div>
 
-    <div class="floating-actions">
-        <button class="fab" id="historyBtn" title="История">
-            <span class="emoji">📚</span>
-        </button>
-        <button class="fab" id="refreshBtn" title="Обновить">
-            <span class="emoji">🔄</span>
-        </button>
+            <div class="form-group">
+                <label for="files">📱 Видео файлы:</label>
+                <input type="file" id="files" multiple accept="video/*" required>
+            </div>
+
+            <div id="fileList" class="file-list"></div>
+
+            <div id="progress" class="progress">
+                <div>Статус: <span id="progressText">Готов к загрузке</span></div>
+            </div>
+
+            <button type="submit" id="submitBtn">🚀 Загрузить видео</button>
+        </form>
+
+        <div id="results" style="display: none; margin-top: 30px;">
+            <h3>✅ Результаты загрузки</h3>
+            <div id="resultContent"></div>
+        </div>
     </div>
 
     <script>
-        console.log('🚨 JavaScript файл загружен!');
-        
-        class VideoUploadApp {
-            constructor() {
-                console.log('🚨 Конструктор запущен!');
-                
-                this.selectedFiles = [];
-                this.uploadHistory = this.loadHistory();
-                this.API_BASE = window.location.origin;
-                
-                console.log('🌐 API_BASE установлен:', this.API_BASE);
-                console.log('📍 Текущий URL:', window.location.href);
-                
-                this.initializeEventListeners();
-                this.setDefaultDate();
-                
-                console.log('✅ Конструктор завершен!');
+        // МАКСИМАЛЬНО ПРОСТОЙ И НАДЕЖНЫЙ КОД
+        console.log('🚨 JavaScript загружен!');
+
+        let selectedFiles = [];
+
+        // Установка текущей даты
+        document.getElementById('date').value = new Date().toISOString().split('T')[0];
+
+        // Обработчик выбора файлов
+        document.getElementById('files').addEventListener('change', function(e) {
+            console.log('📁 Файлы выбраны:', e.target.files.length);
+            selectedFiles = Array.from(e.target.files);
+            updateFileList();
+        });
+
+        // Показать список файлов
+        function updateFileList() {
+            const fileList = document.getElementById('fileList');
+            if (selectedFiles.length === 0) {
+                fileList.innerHTML = '';
+                return;
             }
 
-            initializeEventListeners() {
-                console.log('🔧 Инициализация event listeners...');
-                
-                // File upload area events
-                const fileUploadArea = document.getElementById('fileUploadArea');
-                const fileInput = document.getElementById('fileInput');
-                const uploadForm = document.getElementById('uploadForm');
+            fileList.innerHTML = selectedFiles.map((file, index) => `
+                <div class="file-item">
+                    <span>📹 ${file.name} (${formatFileSize(file.size)})</span>
+                    <button type="button" class="remove-btn" onclick="removeFile(${index})">Удалить</button>
+                </div>
+            `).join('');
+        }
 
-                if (!fileUploadArea) {
-                    console.error('❌ fileUploadArea не найден!');
-                    return;
-                }
-                if (!fileInput) {
-                    console.error('❌ fileInput не найден!');
-                    return;
-                }
-                if (!uploadForm) {
-                    console.error('❌ uploadForm не найдена!');
-                    return;
-                }
+        // Удалить файл
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFileList();
+        }
 
-                console.log('✅ Все элементы найдены, добавляю listeners...');
+        // Форматирование размера файла
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
 
-                fileUploadArea.addEventListener('click', () => fileInput.click());
-                fileUploadArea.addEventListener('dragover', this.handleDragOver.bind(this));
-                fileUploadArea.addEventListener('dragleave', this.handleDragLeave.bind(this));
-                fileUploadArea.addEventListener('drop', this.handleDrop.bind(this));
+        // Показать уведомление
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            alertContainer.appendChild(alertDiv);
 
-                fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
 
-                // Form submission
-                uploadForm.addEventListener('submit', (e) => {
-                    console.log('🚨 EVENT SUBMIT сработал!');
-                    this.handleSubmit(e);
-                });
+        // ГЛАВНАЯ ФУНКЦИЯ ЗАГРУЗКИ
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            console.log('🚨🚨🚨 ФОРМА ОТПРАВЛЕНА!');
 
-                // Floating action buttons
-                document.getElementById('historyBtn').addEventListener('click', this.showHistory.bind(this));
-                document.getElementById('refreshBtn').addEventListener('click', this.refreshPage.bind(this));
-                
-                console.log('✅ Event listeners установлены!');
+            const submitBtn = document.getElementById('submitBtn');
+            const progress = document.getElementById('progress');
+            const progressText = document.getElementById('progressText');
+
+            // Проверки
+            if (selectedFiles.length === 0) {
+                alert('Выберите файлы!');
+                return;
             }
 
-            setDefaultDate() {
-                const today = new Date().toISOString().split('T')[0];
-                document.getElementById('date').value = today;
-            }
+            try {
+                // Показать прогресс
+                progress.style.display = 'block';
+                submitBtn.disabled = true;
+                submitBtn.textContent = '⏳ Загружаю...';
+                progressText.textContent = 'Подготовка к отправке...';
 
-            handleDragOver(e) {
-                e.preventDefault();
-                e.currentTarget.classList.add('dragover');
-            }
-
-            handleDragLeave(e) {
-                e.preventDefault();
-                e.currentTarget.classList.remove('dragover');
-            }
-
-            handleDrop(e) {
-                e.preventDefault();
-                e.currentTarget.classList.remove('dragover');
-                const files = Array.from(e.dataTransfer.files).filter(file => 
-                    file.type.startsWith('video/')
-                );
-                this.addFiles(files);
-            }
-
-            handleFileSelect(e) {
-                const files = Array.from(e.target.files);
-                this.addFiles(files);
-                e.target.value = ''; // Reset input
-            }
-
-            addFiles(files) {
-                files.forEach(file => {
-                    if (!this.selectedFiles.find(f => f.name === file.name && f.size === file.size)) {
-                        this.selectedFiles.push(file);
-                    }
-                });
-                this.renderFileList();
-            }
-
-            removeFile(index) {
-                this.selectedFiles.splice(index, 1);
-                this.renderFileList();
-            }
-
-            renderFileList() {
-                const fileList = document.getElementById('fileList');
-                
-                if (this.selectedFiles.length === 0) {
-                    fileList.innerHTML = '';
-                    return;
-                }
-
-                fileList.innerHTML = this.selectedFiles.map((file, index) => `
-                    <div class="file-item">
-                        <div class="file-info">
-                            <div class="file-name">📹 ${file.name}</div>
-                            <div class="file-size">${this.formatFileSize(file.size)}</div>
-                        </div>
-                        <button type="button" class="file-remove" onclick="app.removeFile(${index})">
-                            ×
-                        </button>
-                    </div>
-                `).join('');
-            }
-
-            formatFileSize(bytes) {
-                if (bytes === 0) return '0 Bytes';
-                const k = 1024;
-                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-                const i = Math.floor(Math.log(bytes) / Math.log(k));
-                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-            }
-
-            async handleSubmit(e) {
-                console.log('🚨🚨🚨 handleSubmit ЗАПУЩЕН!');
-                e.preventDefault();
-                
-                console.log('📁 Выбранные файлы:', this.selectedFiles);
-                console.log('🌍 Текущий домен:', window.location.origin);
-
-                if (this.selectedFiles.length === 0) {
-                    console.error('❌ Нет выбранных файлов');
-                    this.showAlert('Выберите хотя бы один видео файл', 'error');
-                    return;
-                }
-
+                // Собираем данные
                 const formData = new FormData();
-                const form = e.target;
+                formData.append('artikul', document.getElementById('artikul').value);
+                formData.append('date', document.getElementById('date').value);
+                formData.append('description', document.getElementById('description').value);
 
-                // Add form fields
-                formData.append('artikul', form.artikul.value);
-                formData.append('date', form.date.value);
-                formData.append('description', form.description.value);
-
-                console.log('📋 Данные формы:');
-                console.log('   Артикул:', form.artikul.value);
-                console.log('   Дата:', form.date.value);
-                console.log('   Описание:', form.description.value);
-                console.log('   Файлов:', this.selectedFiles.length);
-
-                // Add files
-                this.selectedFiles.forEach((file, index) => {
-                    console.log(`📎 Добавляю файл ${index + 1}: ${file.name} (${file.size} bytes)`);
+                // Добавляем файлы
+                selectedFiles.forEach(file => {
                     formData.append('videos', file);
                 });
 
-                console.log('📦 FormData создан');
-                console.log('🚀 Вызываю uploadFiles...');
+                console.log('📦 FormData готов, отправляю...');
+                progressText.textContent = 'Отправляю файлы на сервер...';
+
+                // ОТПРАВКА ЗАПРОСА
+                console.log('🚀 Отправляю запрос на:', window.location.origin + '/upload');
                 
-                await this.uploadFiles(formData);
-            }
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
 
-            async uploadFiles(formData) {
-                console.log('🚨🚨🚨 uploadFiles ЗАПУЩЕН!');
-                console.log('📦 FormData объект:', formData);
-                console.log('🌐 API URL:', `${this.API_BASE}/upload`);
-                
-                const progressContainer = document.getElementById('progressContainer');
-                const uploadBtn = document.getElementById('uploadBtn');
-                const progressFill = document.getElementById('progressFill');
-                const progressText = document.getElementById('progressText');
+                console.log('📨 Ответ получен:', response.status);
 
-                try {
-                    console.log('🚀 Начинаю загрузку файлов');
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('✅ Результат:', result);
                     
-                    // Show progress
-                    progressContainer.style.display = 'block';
-                    uploadBtn.disabled = true;
-                    uploadBtn.innerHTML = '<span class="emoji">⏳</span> Загружаю...';
-
-                    progressFill.style.width = '10%';
-                    progressText.textContent = 'Отправляю файлы на сервер...';
-
-                    console.log('🚨 ОТПРАВЛЯЮ ЗАПРОС НА СЕРВЕР:', `${this.API_BASE}/upload`);
-                    console.log('📡 Создаю fetch запрос...');
-                    
-                    const response = await fetch(`${this.API_BASE}/upload`, {
-                        method: 'POST',
-                        body: formData
-                    }).catch(error => {
-                        console.error('🔥 ОШИБКА FETCH:', error);
-                        throw new Error(`Ошибка сети: ${error.message}`);
-                    });
-                    
-                    console.log('📨 Получен ответ от сервера:', response.status, response.statusText);
-                    console.log('🌐 Response URL:', response.url);
-
-                    if (response.ok) {
-                        console.log('✅ Ответ успешный, парсю JSON...');
-                        
-                        progressFill.style.width = '100%';
-                        progressText.textContent = '✅ Загрузка завершена!';
-                        
-                        const result = await response.json();
-                        console.log('📋 Результат от сервера:', result);
-                        
-                        this.handleUploadSuccess(result);
-                    } else {
-                        console.error('❌ Ошибка HTTP:', response.status, response.statusText);
-                        
-                        let errorMessage = `HTTP ${response.status}`;
-                        try {
-                            const errorData = await response.json();
-                            errorMessage = errorData.error || errorMessage;
-                            console.error('📋 Данные ошибки:', errorData);
-                        } catch (e) {
-                            console.error('⚠️ Не удалось распарсить ошибку:', e);
-                        }
-                        
-                        throw new Error(errorMessage);
-                    }
-
-                } catch (error) {
-                    console.error('💥 КРИТИЧЕСКАЯ ОШИБКА:', error);
-                    console.error('📍 Стек ошибки:', error.stack);
-                    
-                    progressFill.style.width = '0%';
-                    progressText.textContent = '❌ Ошибка загрузки';
-                    this.showAlert(`Ошибка загрузки: ${error.message}`, 'error');
-                } finally {
-                    setTimeout(() => {
-                        uploadBtn.disabled = false;
-                        uploadBtn.innerHTML = '<span class="emoji">🚀</span> Загрузить видео';
-                    }, 2000);
-                }
-            }
-
-            handleUploadSuccess(result) {
-                // Save to history
-                const historyItem = {
-                    artikul: result.artikul,
-                    date: result.date,
-                    description: result.description,
-                    folder_link: result.folder_link,
-                    files: result.uploaded_files,
-                    uploaded_at: new Date().toISOString()
-                };
-                this.uploadHistory.unshift(historyItem);
-                this.saveHistory();
-
-                // Show results
-                this.showResults(result);
-                this.showAlert('Видео успешно загружены в Dropbox!', 'success');
-            }
-
-            showResults(result) {
-                const resultsSection = document.getElementById('resultsSection');
-                const resultsList = document.getElementById('resultsList');
-                const uploadSection = document.getElementById('uploadSection');
-
-                uploadSection.style.display = 'none';
-                resultsSection.style.display = 'block';
-
-                resultsList.innerHTML = `
-                    <div class="result-item">
-                        <div class="result-header">
-                            <div>
-                                <div class="result-title">📦 ${result.artikul}</div>
-                                <div class="result-stats">Дата: ${result.date} • Файлов: ${result.uploaded_files.length} • Время: ${result.total_duration}</div>
-                            </div>
-                        </div>
-                        <div style="margin: 12px 0; color: #4a5568; font-size: 14px;">
-                            ${result.description}
-                        </div>
-                        <div><strong>Загруженные файлы:</strong></div>
-                        ${result.uploaded_files.map(file => `
-                            <div style="margin: 8px 0; padding: 8px; background: #f7fafc; border-radius: 8px; font-size: 14px;">
-                                📹 ${file.filename} (${file.size}) - ${file.upload_time}
-                            </div>
-                        `).join('')}
-                        <div class="result-links">
-                            <a href="${result.folder_link}" target="_blank" class="result-link">
-                                <span class="emoji">📦</span> Открыть папку
-                            </a>
-                            ${result.sheet_link ? `<a href="${result.sheet_link}" target="_blank" class="result-link">
-                                <span class="emoji">📊</span> Открыть таблицу
-                            </a>` : ''}
-                        </div>
-                    </div>
-                `;
-            }
-
-            resetForm() {
-                // Reset form
-                document.getElementById('uploadForm').reset();
-                this.selectedFiles = [];
-                this.renderFileList();
-                this.setDefaultDate();
-
-                // Reset progress
-                document.getElementById('progressContainer').style.display = 'none';
-                document.getElementById('progressFill').style.width = '0%';
-
-                // Show upload section
-                document.getElementById('uploadSection').style.display = 'block';
-                document.getElementById('resultsSection').style.display = 'none';
-                document.getElementById('historySection').style.display = 'none';
-            }
-
-            showUploadForm() {
-                document.getElementById('uploadSection').style.display = 'block';
-                document.getElementById('resultsSection').style.display = 'none';
-                document.getElementById('historySection').style.display = 'none';
-            }
-
-            showHistory() {
-                const historySection = document.getElementById('historySection');
-                const historyList = document.getElementById('historyList');
-                const uploadSection = document.getElementById('uploadSection');
-                const resultsSection = document.getElementById('resultsSection');
-
-                uploadSection.style.display = 'none';
-                resultsSection.style.display = 'none';
-                historySection.style.display = 'block';
-
-                if (this.uploadHistory.length === 0) {
-                    historyList.innerHTML = `
-                        <div style="text-align: center; color: #718096; padding: 40px 20px;">
-                            <div style="font-size: 48px; margin-bottom: 16px;">📭</div>
-                            <div>История загрузок пуста</div>
-                        </div>
-                    `;
-                    return;
+                    progressText.textContent = '✅ Загрузка завершена!';
+                    showResult(result);
+                    showAlert('Файлы успешно загружены!', 'success');
+                } else {
+                    const error = await response.text();
+                    console.error('❌ Ошибка сервера:', error);
+                    throw new Error('Ошибка сервера: ' + response.status);
                 }
 
-                historyList.innerHTML = this.uploadHistory.map(item => `
-                    <div class="history-item">
-                        <div class="history-header">
-                            <div class="history-artikul">📦 ${item.artikul}</div>
-                            <div class="history-date">${new Date(item.uploaded_at).toLocaleDateString('ru-RU')}</div>
-                        </div>
-                        <div class="history-description">${item.description}</div>
-                        <div style="font-size: 12px; color: #718096; margin-bottom: 8px;">
-                            Файлов: ${item.files.length} • Дата: ${item.date}
-                        </div>
-                        <a href="${item.folder_link}" target="_blank" class="history-link">
-                            Открыть папку в Dropbox →
-                        </a>
-                    </div>
-                `).join('');
+            } catch (error) {
+                console.error('💥 Ошибка:', error);
+                progressText.textContent = '❌ Ошибка загрузки';
+                showAlert('Ошибка: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🚀 Загрузить видео';
             }
+        });
 
-            refreshPage() {
-                window.location.reload();
-            }
-
-            showAlert(message, type = 'info') {
-                const alertContainer = document.getElementById('alertContainer');
-                const alertId = 'alert-' + Date.now();
-                
-                const alertHtml = `
-                    <div id="${alertId}" class="alert alert-${type}">
-                        ${message}
-                    </div>
-                `;
-                
-                alertContainer.insertAdjacentHTML('afterbegin', alertHtml);
-                
-                // Auto remove after 5 seconds
-                setTimeout(() => {
-                    const alertElement = document.getElementById(alertId);
-                    if (alertElement) {
-                        alertElement.remove();
-                    }
-                }, 5000);
-            }
-
-            loadHistory() {
-                try {
-                    const history = localStorage.getItem('videoUploadHistory');
-                    return history ? JSON.parse(history) : [];
-                } catch (e) {
-                    return [];
-                }
-            }
-
-            saveHistory() {
-                try {
-                    // Keep only last 50 items
-                    const historyToSave = this.uploadHistory.slice(0, 50);
-                    localStorage.setItem('videoUploadHistory', JSON.stringify(historyToSave));
-                } catch (e) {
-                    console.error('Failed to save history:', e);
-                }
-            }
-        }
-
-        // Initialize app
-        console.log('🚨 Начинаю инициализацию класса!');
-        try {
-            const app = new VideoUploadApp();
-            console.log('✅ Класс создан успешно!');
+        // Показать результаты
+        function showResult(result) {
+            const resultsDiv = document.getElementById('results');
+            const resultContent = document.getElementById('resultContent');
             
-            // Make app globally available for onclick handlers
-            window.app = app;
-            console.log('✅ Класс добавлен в window!');
-        } catch (error) {
-            console.error('💥 Ошибка создания класса:', error);
-            alert('💥 ОШИБКА СОЗДАНИЯ КЛАССА: ' + error.message);
+            resultContent.innerHTML = `
+                <p><strong>Артикул:</strong> ${result.artikul}</p>
+                <p><strong>Дата:</strong> ${result.date}</p>
+                <p><strong>Описание:</strong> ${result.description}</p>
+                <p><strong>Загружено файлов:</strong> ${result.uploaded_files.length}</p>
+                <p><strong>Время загрузки:</strong> ${result.total_duration}</p>
+                <div style="margin: 20px 0;">
+                    <a href="${result.folder_link}" target="_blank" style="display: inline-block; background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-right: 10px;">📦 Открыть папку Dropbox</a>
+                    ${result.sheet_link ? `<a href="${result.sheet_link}" target="_blank" style="display: inline-block; background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">📊 Открыть таблицу</a>` : ''}
+                </div>
+            `;
+            
+            resultsDiv.style.display = 'block';
+            document.getElementById('uploadForm').scrollIntoView();
         }
+
+        console.log('✅ Все скрипты загружены и готовы!');
     </script>
 </body>
 </html>
